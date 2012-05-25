@@ -34,35 +34,65 @@
  */
 (function($) {
 	//@todo bind events: http://docs.jquery.com/Plugins/Authoring#Events
-	//@todo add option: auto resize horizontally.
+	//@todo recalculate horScrollbar and verScrollbar
 	$.fn.xautoresize = function(options) {
 		options = $.extend({
-			autoUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
-			autoDown: true //auto reduce height to fit content. Use css min-height to set minimum height.
+			autoWidthUp: true, //auto increase width to fit content. Use css max-width to set maximum width.
+			autoWidthDown: true, //auto reduce width to fit content. Use css min-width to set minimum width.
+			autoHeightUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
+			autoHeightDown: true //auto reduce height to fit content. Use css min-height to set minimum height.
 		}, options);
 		
-		if (options.autoUp != true) {
-			options.autoUp = false;
+		if (options.autoWidthUp != true) {
+			options.autoWidthUp = false;
 		}
-		if (options.autoDown != true) {
-			options.autoDown = false;
+		if (options.autoWidthDown != true) {
+			options.autoWidthDown = false;
+		}
+		if (options.autoHeightUp != true) {
+			options.autoHeightUp = false;
+		}
+		if (options.autoHeightDown != true) {
+			options.autoHeightDown = false;
 		}
 		
 		return this.each(function() {
-			if (options.autoUp || options.autoDown) {
+			if (options.autoHeightUp || options.autoHeightDown) {
 				var oldHeight = $(this).height();
+				var oldWidth = $(this).width();
+				
+				//get content's width. @see https://developer.mozilla.org/en/DOM/element.scrollWidth
+				$(this).width(0); //fix bug: return wrong scrollWidth in some browsers
+				var newWidth = $(this).prop('scrollWidth');
+				
+				var updateWidth = options.autoWidthUp && oldWidth < newWidth;
+				updateWidth = updateWidth || options.autoWidthDown && oldWidth > newWidth;
+				if (updateWidth) {
+					$(this).width(newWidth);
+				} else {
+					$(this).width(oldWidth);
+				}
 				
 				//get content's height. @see https://developer.mozilla.org/en/DOM/element.scrollHeight
-				$(this).height(0);
+				$(this).height(0); //fix bug: return wrong scrollHeight in some browsers
 				var newHeight = $(this).prop('scrollHeight');
 				
-				var update = options.autoDown && oldHeight > newHeight;
-				update = update || options.autoUp && oldHeight < newHeight;
+				var updateHeight = options.autoHeightDown && oldHeight > newHeight;
+				updateHeight = updateHeight || options.autoHeightUp && oldHeight < newHeight;
 				
-				if (update) {
+				if (updateHeight) {
 					$(this).height(newHeight);
 				} else {
 					$(this).height(oldHeight);
+				}
+				
+				var horScrollbar = $(this).height() - $(this).prop('clientHeight');
+				var verScrollbar = $(this).width() - $(this).prop('clientWidth');
+				if (updateWidth && horScrollbar > 0) {
+					$(this).height($(this).height() + horScrollbar);
+				}
+				if (updateHeight && verScrollbar > 0) {
+					$(this).width($(this).width() + verScrollbar);
 				}
 			}
 		});
