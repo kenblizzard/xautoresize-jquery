@@ -1,4 +1,6 @@
 /*!
+ * The xautoresize-jquery plugin is released under the terms of the following BSD License.
+ *
  * Copyright (c) 2012, Xuan Dai Nguyen (http://code.google.com/p/xautoresize-jquery)
  * All rights reserved.
  * 
@@ -28,6 +30,7 @@
 /**
  * This jQuery plugin auto resize to fit content of a element (textarea, div and so on).
  * 
+ * @author Xuan Dai Nguyen <nguyenxndaidev@gmail.com>
  */
 (function($) {
 	//@todo bind events: http://docs.jquery.com/Plugins/Authoring#Events
