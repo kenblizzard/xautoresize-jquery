@@ -34,7 +34,6 @@
  */
 (function($) {
 	//@todo bind events: http://docs.jquery.com/Plugins/Authoring#Events
-	//@todo recalculate horScrollbar and verScrollbar
 	$.fn.xautoresize = function(options) {
 		options = $.extend({
 			autoWidthUp: true, //auto increase width to fit content. Use css max-width to set maximum width.
@@ -57,41 +56,49 @@
 		}
 		
 		return this.each(function() {
-			if (options.autoHeightUp || options.autoHeightDown) {
-				var oldHeight = $(this).height();
+			var updateWidth = false;
+			if (options.autoWidthUp || options.autoWidthDown) {
 				var oldWidth = $(this).width();
 				
 				//get content's width. @see https://developer.mozilla.org/en/DOM/element.scrollWidth
 				$(this).width(0); //fix bug: return wrong scrollWidth in some browsers
 				var newWidth = $(this).prop('scrollWidth');
-				
-				var updateWidth = options.autoWidthUp && oldWidth < newWidth;
+				updateWidth = options.autoWidthUp && oldWidth < newWidth;
 				updateWidth = updateWidth || options.autoWidthDown && oldWidth > newWidth;
 				if (updateWidth) {
 					$(this).width(newWidth);
 				} else {
 					$(this).width(oldWidth);
 				}
+			}
+			
+			var updateHeight = false;
+			if (options.autoHeightUp || options.autoHeightDown) {
+				var oldHeight = $(this).height();
 				
 				//get content's height. @see https://developer.mozilla.org/en/DOM/element.scrollHeight
 				$(this).height(0); //fix bug: return wrong scrollHeight in some browsers
 				var newHeight = $(this).prop('scrollHeight');
-				
-				var updateHeight = options.autoHeightDown && oldHeight > newHeight;
+				updateHeight = options.autoHeightDown && oldHeight > newHeight;
 				updateHeight = updateHeight || options.autoHeightUp && oldHeight < newHeight;
-				
 				if (updateHeight) {
 					$(this).height(newHeight);
 				} else {
 					$(this).height(oldHeight);
 				}
-				
+			}
+			
+			//after update width and height, it is possible to appear scrollbars.
+			//The sizes need to be increased by the sizes of the scrollbars.
+			if (options.autoHeightUp) {
 				var horScrollbar = $(this).height() - $(this).prop('clientHeight');
-				var verScrollbar = $(this).width() - $(this).prop('clientWidth');
-				if (updateWidth && horScrollbar > 0) {
+				if (horScrollbar > 0) {
 					$(this).height($(this).height() + horScrollbar);
 				}
-				if (updateHeight && verScrollbar > 0) {
+			}
+			if (options.autoWidthUp) {
+				var verScrollbar = $(this).width() - $(this).prop('clientWidth');
+				if (verScrollbar > 0) {
 					$(this).width($(this).width() + verScrollbar);
 				}
 			}
