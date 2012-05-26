@@ -31,77 +31,112 @@
  * This jQuery plugin auto resize to fit content of a element (textarea, div and so on).
  * 
  * @author Xuan Dai Nguyen <nguyenxndaidev@gmail.com>
+ * @todo for each element, run init() only at the first time
+ * @todo For a very long text, the scrollHeight is mostly incorrect. That is the browser's bug. We cannot fix it totally ultil now.
+ * @todo auto resize horizontally
  */
 (function($) {
-	//@todo bind events: http://docs.jquery.com/Plugins/Authoring#Events
-	$.fn.xautoresize = function(options) {
-		options = $.extend({
-			autoWidthUp: true, //auto increase width to fit content. Use css max-width to set maximum width.
-			autoWidthDown: true, //auto reduce width to fit content. Use css min-width to set minimum width.
-			autoHeightUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
-			autoHeightDown: true //auto reduce height to fit content. Use css min-height to set minimum height.
-		}, options);
-		
-		if (options.autoWidthUp != true) {
-			options.autoWidthUp = false;
-		}
-		if (options.autoWidthDown != true) {
-			options.autoWidthDown = false;
-		}
-		if (options.autoHeightUp != true) {
-			options.autoHeightUp = false;
-		}
-		if (options.autoHeightDown != true) {
-			options.autoHeightDown = false;
-		}
-		
-		return this.each(function() {
-			var updateWidth = false;
-			if (options.autoWidthUp || options.autoWidthDown) {
-				var oldWidth = $(this).width();
-				
-				//get content's width. @see https://developer.mozilla.org/en/DOM/element.scrollWidth
-				$(this).width(0); //fix bug: return wrong scrollWidth in some browsers
-				var newWidth = $(this).prop('scrollWidth');
-				updateWidth = options.autoWidthUp && oldWidth < newWidth;
-				updateWidth = updateWidth || options.autoWidthDown && oldWidth > newWidth;
-				if (updateWidth) {
-					$(this).width(newWidth);
-				} else {
-					$(this).width(oldWidth);
-				}
-			}
-			
+	var methods = {
+		resize: function(el, options) {
 			var updateHeight = false;
 			if (options.autoHeightUp || options.autoHeightDown) {
-				var oldHeight = $(this).height();
+				var oldOverflowY = el.css("overflowY");
+				el.css("overflowY", "scroll");
+				var oldHeight = el.height();
 				
 				//get content's height. @see https://developer.mozilla.org/en/DOM/element.scrollHeight
-				$(this).height(0); //fix bug: return wrong scrollHeight in some browsers
-				var newHeight = $(this).prop('scrollHeight');
+				el.height(0); //fix bug: return wrong scrollHeight in some browsers
+				var newHeight = el.prop("scrollHeight");
 				updateHeight = options.autoHeightDown && oldHeight > newHeight;
 				updateHeight = updateHeight || options.autoHeightUp && oldHeight < newHeight;
 				if (updateHeight) {
-					$(this).height(newHeight);
+					el.height(newHeight);
 				} else {
-					$(this).height(oldHeight);
+					el.height(oldHeight);
 				}
+				el.css("overflowY", oldOverflowY);
 			}
 			
-			//after update width and height, it is possible to appear scrollbars.
-			//The sizes need to be increased by the sizes of the scrollbars.
+			//after update height, it is possible to appear horizontal scrollbar.
+			//The height need to be increased by the height of the scrollbar.
 			if (options.autoHeightUp) {
-				var horScrollbar = $(this).height() - $(this).prop('clientHeight');
-				if (horScrollbar > 0) {
-					$(this).height($(this).height() + horScrollbar);
+				var horScrollbarHeight = el.height() - el.prop("clientHeight");
+				if (horScrollbarHeight > 0) {
+					el.height(el.height() + horScrollbarHeight);
 				}
 			}
-			if (options.autoWidthUp) {
-				var verScrollbar = $(this).width() - $(this).prop('clientWidth');
-				if (verScrollbar > 0) {
-					$(this).width($(this).width() + verScrollbar);
+		}
+	};
+	var actions = {
+		init: function(options) {
+			return this.each(function(index) {
+				methods.resize($(this), options);
+				var events = [];
+				if (options.keyup) {
+					events.push("keyup.xautoresize");
 				}
-			}
-		});
+				if (options.keydown) {
+					events.push("keydown.xautoresize");
+				}
+				if (options.focus) {
+					events.push("focus.xautoresize");
+				}
+				if (options.change) {
+					events.push("change.xautoresize");
+				}
+				if (events.length > 0) {
+					$(this).bind(events.join(" "), function() {
+						methods.resize($(this), options);
+					});
+				}
+			});
+		},
+		destroy: function() {
+			return this.each(function(index){
+				$(this).unbind(".xautoresize");
+			});
+		},
+		resize: function(options) {
+			return this.each(function(index){
+				methods.resize($(this), options);
+			});
+		}
+	};
+	
+	$.fn.xautoresize = function(options) {
+		options = $.extend({
+			action: "init",
+			autoHeightUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
+			autoHeightDown: true, //auto reduce height to fit content. Use css min-height to set minimum height.
+			keyup: true,
+			keydown: true,
+			focus: true,
+			change: true
+		}, options);
+		
+		if (options.autoHeightUp !== true) {
+			options.autoHeightUp = false;
+		}
+		if (options.autoHeightDown !== true) {
+			options.autoHeightDown = false;
+		}
+		if (options.keyup !== true) {
+			options.keyup = false;
+		}
+		if (options.keydown !== true) {
+			options.keydown = false;
+		}
+		if (options.focus !== true) {
+			options.focus = false;
+		}
+		if (options.change !== true) {
+			options.change = false;
+		}
+		
+		if (actions[options.action]) {
+			return actions[options.action].apply(this, [options]);
+		} else {
+			return actions.init.apply(this, [options]);
+		}
 	};
 })(jQuery);
