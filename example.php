@@ -20,15 +20,15 @@
 				var len = $(".textarea").length;
 				$(".textarea").xautoresize({action: "resize"});
 				t = Number(new Date()) - t;
-				$("span#info").html(len + " elements are initiated in " + t + "ms");
+				$("span#info").html(len + " elements are resized (without event binding) in " + t + "ms");
 			}
 		</script>
 		<style type="text/css">
 			.textarea {
-/*				max-height: 500px;
-				max-width: 500px;*/
+				max-height: 500px;
+				max-width: 500px;
 				min-height: 50px;
-				min-width: 50px;
+				min-width: 250px;
 				width: 0px;
 				height: 0px;
 				padding: 0px;
