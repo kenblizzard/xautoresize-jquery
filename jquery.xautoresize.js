@@ -31,8 +31,9 @@
  * This jQuery plugin auto resize to fit content of a element (textarea, div and so on).
  * 
  * @author Xuan Dai Nguyen <nguyenxndaidev@gmail.com>
- * @todo For a very long text, the scrollHeight is mostly incorrect. That is the browser's bug. We cannot fix it totally ultil now.
+ * 
  * @todo auto resize horizontally
+ * @todo For a very long text, the scrollHeight is mostly incorrect. That is the browser's bug. We cannot fix it totally ultil now.
  */
 (function($) {
 	var methods = {
@@ -44,10 +45,15 @@
 				var oldHeight = el.height();
 				
 				//get content's height. @see https://developer.mozilla.org/en/DOM/element.scrollHeight
-				el.height(0); //fix bug: return wrong scrollHeight in some browsers
 				var newHeight = el.prop("scrollHeight");
-				updateHeight = options.autoHeightDown && oldHeight > newHeight;
-				updateHeight = updateHeight || options.autoHeightUp && oldHeight < newHeight;
+				updateHeight = options.autoHeightUp && oldHeight < newHeight;
+				if (!updateHeight && options.autoHeightDown && (el.prop("scrollHeight") == el.prop("clientHeight"))) {
+					//@todo check if content's height is smaller than current height without change height to "0"
+					//reset height to "0" can effect the scroll position of the parent element.
+					el.height(0);
+					newHeight = el.prop("scrollHeight");
+					updateHeight = oldHeight > newHeight;
+				}
 				if (updateHeight) {
 					el.height(newHeight);
 				} else {
@@ -108,7 +114,7 @@
 		options = $.extend({
 			action: "init",
 			autoHeightUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
-			autoHeightDown: true, //auto reduce height to fit content. Use css min-height to set minimum height.
+			autoHeightDown: false, //auto reduce height to fit content. Use css min-height to set minimum height.
 			keyup: true,
 			keydown: true,
 			focus: true,

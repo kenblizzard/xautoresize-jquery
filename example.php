@@ -8,7 +8,12 @@
 			function enable() {
 				var t = Number(new Date());
 				var len = $(".textarea").length;
-				$(".textarea").xautoresize();
+				$(".textarea").xautoresize({
+					keyup: true,
+					keydown: true,
+					focus: true,
+					change: true
+				});
 				t = Number(new Date()) - t;
 				$("span#info").html(len + " elements are initiated in " + t + "ms");
 			}
@@ -45,20 +50,20 @@
 		<span id="info"></span>
 		<br />
 		<?php for ($i = 0; $i < 10; $i++) { ?>
-		<textarea id="textarea_<?php echo $i; ?>" class="textarea">
-			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
-			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
-			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
-			Sed bibendum purus non magna sollicitudin tempor.
-			Donec ac odio leo. Maecenas quis mollis risus.
-		</textarea>
-		<div class="textarea">
-			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
-			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
-			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
-			Sed bibendum purus non magna sollicitudin tempor.
-			Donec ac odio leo. Maecenas quis mollis risus.
-		</div>
+			<textarea id="textarea_<?php echo $i; ?>" class="textarea">
+				Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+				Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+				Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+				Sed bibendum purus non magna sollicitudin tempor.
+				Donec ac odio leo. Maecenas quis mollis risus.
+			</textarea>
+			<div class="textarea">
+				Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+				Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+				Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+				Sed bibendum purus non magna sollicitudin tempor.
+				Donec ac odio leo. Maecenas quis mollis risus.
+			</div>
 		<?php } ?>
     </body>
 </html>
