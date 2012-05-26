@@ -31,7 +31,6 @@
  * This jQuery plugin auto resize to fit content of a element (textarea, div and so on).
  * 
  * @author Xuan Dai Nguyen <nguyenxndaidev@gmail.com>
- * @todo for each element, run init() only at the first time
  * @todo For a very long text, the scrollHeight is mostly incorrect. That is the browser's bug. We cannot fix it totally ultil now.
  * @todo auto resize horizontally
  */
@@ -85,7 +84,9 @@
 					events.push("change.xautoresize");
 				}
 				if (events.length > 0) {
-					$(this).bind(events.join(" "), function() {
+					events = events.join(" ");
+					$(this).unbind(events);
+					$(this).bind(events, function() {
 						methods.resize($(this), options);
 					});
 				}

@@ -43,8 +43,8 @@
 		<button onclick="disable();">Disable Auto Resize</button>
 		<button onclick="resize();">Resize</button>
 		<span id="info"></span>
-		<?php for ($i = 0; $i < 1; $i++) { ?>
 		<br />
+		<?php for ($i = 0; $i < 10; $i++) { ?>
 		<textarea id="textarea_<?php echo $i; ?>" class="textarea">
 			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
 			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
