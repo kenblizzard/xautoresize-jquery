@@ -33,7 +33,10 @@
  * @author Xuan Dai Nguyen <nguyenxndaidev@gmail.com>
  * 
  * @todo auto resize horizontally
- * @todo For a very long text, the scrollHeight is mostly incorrect. That is the browser's bug. We cannot fix it totally ultil now.
+ * 
+ * @todo For a very long text, the scrollHeight is mostly incorrect.
+ * That is the browser's bug. We cannot fix it totally ultil now.
+ * 
  */
 (function($) {
 	var methods = {
@@ -41,25 +44,46 @@
 			var updateHeight = false;
 			if (options.autoHeightUp || options.autoHeightDown) {
 				var oldOverflowY = el.css("overflowY");
-				el.css("overflowY", "scroll");
-				var oldHeight = el.height();
-				
-				//get content's height. @see https://developer.mozilla.org/en/DOM/element.scrollHeight
-				var newHeight = el.prop("scrollHeight");
-				updateHeight = options.autoHeightUp && oldHeight < newHeight;
-				if (!updateHeight && options.autoHeightDown && (el.prop("scrollHeight") == el.prop("clientHeight"))) {
-					//@todo check if content's height is smaller than current height without change height to "0"
-					//reset height to "0" can effect the scroll position of the parent element.
-					el.height(0);
-					newHeight = el.prop("scrollHeight");
-					updateHeight = oldHeight > newHeight;
+				if (options.force) {
+					el.css("overflowY", "scroll");
 				}
-				if (updateHeight) {
-					el.height(newHeight);
+				var sh = el.prop("scrollHeight");
+				var ch = el.prop("clientHeight");
+				if (sh > ch) {
+					//content is higher than the container
+					if (options.autoHeightUp) {
+						el.height(sh);
+					}
+				} else if (sh == ch) {
+					//content is equal or smaller than the container
+					if (options.autoHeightDown) {
+						//temporary add a div with the current height to prevent affecting posible parent scroll position
+						el.after(function() {
+							var style = "background-color: transparent;";
+							style += "width: 0px;";
+							style += "height: " + el.height() + "px;";
+							style += "overflow: hidden;";
+							style += "border-width: 0px;";
+							style += "padding: 0px;";
+							style += "margin: 0px;";
+							style += "float: " + el.css("float") + ";";
+							var html = "<div style='" + style + "'/>";
+							return html;
+						});
+						el.height(0);
+						el.height(el.prop("scrollHeight"));
+						el.next().remove();
+					}
 				} else {
-					el.height(oldHeight);
+					//only work on IE
+					//content is smaller than the container
+					if (options.autoHeightDown) {
+						el.height(sh);
+					}
 				}
-				el.css("overflowY", oldOverflowY);
+				if (options.force) {
+					el.css("overflowY", oldOverflowY);
+				}
 			}
 			
 			//after update height, it is possible to appear horizontal scrollbar.
@@ -113,8 +137,9 @@
 	$.fn.xautoresize = function(options) {
 		options = $.extend({
 			action: "init",
+			force: false, //if true, change overflow to scroll to get correct size, then change back to previous overflow.
 			autoHeightUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
-			autoHeightDown: false, //auto reduce height to fit content. Use css min-height to set minimum height.
+			autoHeightDown: true, //auto reduce height to fit content. Use css min-height to set minimum height.
 			keyup: true,
 			keydown: true,
 			focus: true,

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="jquery.xautoresize.js"></script>
+		<script type="text/javascript">
+			function enable(force) {
+				var t = Number(new Date());
+				var len = $(".textarea").length;
+				$(".textarea").xautoresize({
+					force: force, //if true, change overflow to scroll to get correct size, then change back to previous overflow.
+					autoHeightUp: true, //auto increase height to fit content. Use css max-height to set maximum height.
+					autoHeightDown: true, //auto reduce height to fit content. Use css min-height to set minimum height.
+					keyup: true, //enable auto resize for keyup event
+					keydown: true, //enable auto resize for keydown event
+					focus: true, //enable auto resize for focus event
+					change: true //enable auto resize for change event
+				});
+				t = Number(new Date()) - t;
+				$("span#info").html(len + " elements are initiated in " + t + "ms");
+			}
+			function disable() {
+				$(".textarea").xautoresize({action: "destroy"});
+			}
+			function resize() {
+				var t = Number(new Date());
+				var len = $(".textarea").length;
+				$(".textarea").xautoresize({action: "resize"});
+				t = Number(new Date()) - t;
+				$("span#info").html(len + " elements are resized (without event binding) in " + t + "ms");
+			}
+		</script>
+		<style type="text/css">
+			.textarea {
+				max-height: 500px;
+				max-width: 500px;
+				min-height: 50px;
+				min-width: 250px;
+				width: 0px;
+				height: 0px;
+				padding: 0px;
+				margin: 0px;
+				border: 1px solid red;
+/*				overflow: auto;*/
+			}
+		</style>
+    </head>
+    <body>
+		<button onclick="enable();">Enable Auto Resize</button>
+		<button onclick="enable(true);">Enable Auto Force Resize</button>
+		<button onclick="disable();">Disable Auto Resize</button>
+		<button onclick="resize();">Resize</button>
+		<span id="info"></span>
+		<br />
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+		<textarea class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</textarea>
+		<div class="textarea">
+			Proin placerat scelerisque mattis. Duis ut sem augue, at tempor purus.
+			Donec vestibulum ipsum non ligula mollis id bibendum massa lacinia.
+			Praesent nunc risus, pellentesque pharetra aliquet nec, vulputate sed quam.
+			Sed bibendum purus non magna sollicitudin tempor.
+			Donec ac odio leo. Maecenas quis mollis risus.
+		</div>
+    </body>
+</html>
